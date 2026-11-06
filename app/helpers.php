@@ -111,7 +111,7 @@ function flash_get(): array
     return $messages;
 }
 
-/* ---------- CSRF (used from Module 3 onward) ---------- */
+/* ---------- CSRF ---------- */
 
 function csrf_token(): string
 {
@@ -138,4 +138,29 @@ function log_error(string $message): void
 {
     $line = '[' . date('Y-m-d H:i:s') . '] ' . $message . PHP_EOL;
     @file_put_contents(BASE_PATH . '/storage/logs/app.log', $line, FILE_APPEND | LOCK_EX);
+}
+
+/* ---------- Request helpers (Module 3) ---------- */
+
+/** Client IP. REMOTE_ADDR only: headers like X-Forwarded-For can be faked by the client. */
+function client_ip(): string
+{
+    return $_SERVER['REMOTE_ADDR'] ?? '0.0.0.0';
+}
+
+/** Stops the request with 403 if the CSRF token is missing or wrong. Call at the top of every POST handler. */
+function require_csrf(): void
+{
+    if (!csrf_verify()) {
+        abort(403);
+    }
+}
+
+/** Renders an inline error message under a form field, or nothing. */
+function field_error(array $errors, string $key): string
+{
+    if (empty($errors[$key])) {
+        return '';
+    }
+    return '<p class="field-error" id="err-' . e($key) . '">' . e($errors[$key]) . '</p>';
 }

@@ -15,8 +15,20 @@ $flashes = flash_get();
     <header class="site-header">
         <div class="container header-inner">
             <a class="brand" href="<?= e(url('/')) ?>"><?= e(config('app.name')) ?></a>
+            <?php $navUser = current_user(); ?>
             <nav aria-label="Main navigation">
                 <a href="<?= e(url('/')) ?>">Home</a>
+                <?php if ($navUser): ?>
+                    <a href="<?= e(url('/dashboard')) ?>">Dashboard</a>
+                    <a href="<?= e(url('/profile')) ?>">Profile</a>
+                    <form method="post" action="<?= e(url('/logout')) ?>" class="inline-form">
+                        <?= csrf_field() ?>
+                        <button type="submit" class="link-button">Log out</button>
+                    </form>
+                <?php else: ?>
+                    <a href="<?= e(url('/login')) ?>">Log in</a>
+                    <a href="<?= e(url('/register')) ?>">Register</a>
+                <?php endif; ?>
             </nav>
         </div>
     </header>

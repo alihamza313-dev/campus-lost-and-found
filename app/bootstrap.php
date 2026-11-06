@@ -9,11 +9,9 @@ require BASE_PATH . '/app/database.php';
 require BASE_PATH . '/app/router.php';
 
 /* ---------- Error handling ---------- */
-// Never print PHP errors to the browser. We log them ourselves.
 ini_set('display_errors', '0');
 error_reporting(E_ALL);
 
-// Turn warnings/notices into exceptions so nothing fails silently.
 set_error_handler(function (int $severity, string $message, string $file, int $line): bool {
     if (!(error_reporting() & $severity)) {
         return false;
@@ -23,6 +21,10 @@ set_error_handler(function (int $severity, string $message, string $file, int $l
 
 set_exception_handler(function (Throwable $ex): void {
     log_error(get_class($ex) . ': ' . $ex->getMessage() . ' in ' . $ex->getFile() . ':' . $ex->getLine());
+    if (PHP_SAPI === 'cli') {
+        fwrite(STDERR, 'Error: ' . $ex->getMessage() . PHP_EOL);
+        exit(1);
+    }
     http_response_code(500);
     if (config('app.debug')) {
         echo '<pre>' . e(get_class($ex) . ': ' . $ex->getMessage()) . '</pre>';
@@ -31,25 +33,28 @@ set_exception_handler(function (Throwable $ex): void {
     }
 });
 
-/* ---------- Basic security headers ---------- */
-header('X-Content-Type-Options: nosniff');
-header('X-Frame-Options: DENY');
-header('Referrer-Policy: same-origin');
+/* ---------- Load services, models, controllers ---------- */
+foreach (['services', 'models', 'controllers'] as $dir) {
+    foreach (glob(BASE_PATH . "/app/$dir/*.php") as $file) {
+        require $file;
+    }
+}
 
-/* ---------- Session ---------- */
-$isHttps = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off');
-session_name('clf_session');
-session_set_cookie_params([
-    'lifetime' => 0,
-    'path'     => '/',
-    'secure'   => $isHttps,
-    'httponly' => true,
-    'samesite' => 'Lax',
-]);
-ini_set('session.use_strict_mode', '1');
-session_start();
+/* ---------- Web-only setup: headers and session ---------- */
+if (PHP_SAPI !== 'cli') {
+    header('X-Content-Type-Options: nosniff');
+    header('X-Frame-Options: DENY');
+    header('Referrer-Policy: same-origin');
 
-/* ---------- Load all controllers ---------- */
-foreach (glob(BASE_PATH . '/app/controllers/*.php') as $controllerFile) {
-    require $controllerFile;
+    $isHttps = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off');
+    session_name('clf_session');
+    session_set_cookie_params([
+        'lifetime' => 0,
+        'path'     => '/',
+        'secure'   => $isHttps,
+        'httponly' => true,
+        'samesite' => 'Lax',
+    ]);
+    ini_set('session.use_strict_mode', '1');
+    session_start();
 }
