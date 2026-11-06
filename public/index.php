@@ -1,2 +1,6 @@
 <?php
-echo "Campus Lost & Found: environment is working. PHP " . PHP_VERSION;
+declare(strict_types=1);
+
+require dirname(__DIR__) . '/app/bootstrap.php';
+
+dispatch(require BASE_PATH . '/app/routes.php');
