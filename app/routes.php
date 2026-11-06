@@ -17,4 +17,12 @@ return [
     ['GET',  '/profile',          'profile_form'],
     ['POST', '/profile',          'profile_update'],
     ['POST', '/profile/password', 'password_update'],
+
+    ['GET',  '/items/new',            'item_new_form'],
+    ['POST', '/items/new',            'item_create_submit'],
+    ['GET',  '/items/{id}/edit',      'item_edit_form'],
+    ['POST', '/items/{id}/edit',      'item_edit_submit'],
+    ['POST', '/items/{id}/close',     'item_close_submit'],
+    ['POST', '/items/{id}/recovered', 'item_recovered_submit'],
+    ['GET',  '/my/items',             'my_items_index'],
 ];

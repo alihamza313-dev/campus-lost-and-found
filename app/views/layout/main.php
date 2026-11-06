@@ -1,5 +1,6 @@
 <?php
 $flashes = flash_get();
+$navUser = current_user();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -8,6 +9,10 @@ $flashes = flash_get();
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title><?= e(($title ?? '') !== '' ? $title . ' | ' : '') ?><?= e(config('app.name')) ?></title>
     <link rel="stylesheet" href="<?= e(asset('css/style.css')) ?>">
+    <script src="<?= e(asset('js/app.js')) ?>" defer></script>
+    <?php foreach (($scripts ?? []) as $s): ?>
+        <script src="<?= e(asset($s)) ?>" defer></script>
+    <?php endforeach; ?>
 </head>
 <body>
     <a class="skip-link" href="#main">Skip to content</a>
@@ -15,11 +20,12 @@ $flashes = flash_get();
     <header class="site-header">
         <div class="container header-inner">
             <a class="brand" href="<?= e(url('/')) ?>"><?= e(config('app.name')) ?></a>
-            <?php $navUser = current_user(); ?>
             <nav aria-label="Main navigation">
                 <a href="<?= e(url('/')) ?>">Home</a>
                 <?php if ($navUser): ?>
                     <a href="<?= e(url('/dashboard')) ?>">Dashboard</a>
+                    <a href="<?= e(url('/items/new')) ?>">Report item</a>
+                    <a href="<?= e(url('/my/items')) ?>">My listings</a>
                     <a href="<?= e(url('/profile')) ?>">Profile</a>
                     <form method="post" action="<?= e(url('/logout')) ?>" class="inline-form">
                         <?= csrf_field() ?>

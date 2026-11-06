@@ -17,6 +17,14 @@
     </div>
 <?php endif; ?>
 
+<?php if (user_can_act($user)): ?>
+    <p>
+        <a class="btn" href="<?= e(url('/items/new?type=lost')) ?>">Report a lost item</a>
+        <a class="btn btn-secondary" href="<?= e(url('/items/new?type=found')) ?>">Report a found item</a>
+        <a class="btn btn-secondary" href="<?= e(url('/my/items')) ?>">My listings</a>
+    </p>
+<?php endif; ?>
+
 <table class="table">
     <tr><th scope="row">Email</th><td><?= e($user['university_email']) ?></td></tr>
     <tr><th scope="row">Role</th><td><?= e(ucfirst($user['role'])) ?></td></tr>
