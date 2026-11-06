@@ -1,0 +1,10 @@
+.env
+storage/*
+!storage/.gitkeep
+*.log
+public/db-test.php
+vendor/
+.vscode/
+.idea/
+.DS_Store
+*.swp
