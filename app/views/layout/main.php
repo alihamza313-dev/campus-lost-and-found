@@ -33,6 +33,7 @@ $unreadMsgs  = $navUser ? message_unread_count((int) $navUser['user_id']) : 0;
                     <?php if (in_array($navUser['role'], ['custodian', 'admin'], true)): ?>
                         <a href="<?= e(url('/review')) ?>">Review claims</a>
                         <a href="<?= e(url('/custodian')) ?>">Handovers</a>
+                        <?php if ($navUser['role'] === 'admin'): ?><a href="<?= e(url('/admin')) ?>">Admin</a><?php endif; ?>
                     <?php endif; ?>
                     <a href="<?= e(url('/messages')) ?>">Messages<?php if ($unreadMsgs > 0): ?> <span class="count-badge" aria-label="<?= (int) $unreadMsgs ?> unread messages"><?= (int) $unreadMsgs ?></span><?php endif; ?></a>
                     <a href="<?= e(url('/notifications')) ?>">Notifications<?php if ($unreadNotes > 0): ?> <span class="count-badge" aria-label="<?= (int) $unreadNotes ?> unread notifications"><?= (int) $unreadNotes ?></span><?php endif; ?></a>
