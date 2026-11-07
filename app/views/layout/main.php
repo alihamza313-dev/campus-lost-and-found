@@ -1,6 +1,8 @@
 <?php
 $flashes = flash_get();
 $navUser = current_user();
+$unreadNotes = $navUser ? notification_unread_count((int) $navUser['user_id']) : 0;
+$unreadMsgs  = $navUser ? message_unread_count((int) $navUser['user_id']) : 0;
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -32,6 +34,8 @@ $navUser = current_user();
                         <a href="<?= e(url('/review')) ?>">Review claims</a>
                         <a href="<?= e(url('/custodian')) ?>">Handovers</a>
                     <?php endif; ?>
+                    <a href="<?= e(url('/messages')) ?>">Messages<?php if ($unreadMsgs > 0): ?> <span class="count-badge" aria-label="<?= (int) $unreadMsgs ?> unread messages"><?= (int) $unreadMsgs ?></span><?php endif; ?></a>
+                    <a href="<?= e(url('/notifications')) ?>">Notifications<?php if ($unreadNotes > 0): ?> <span class="count-badge" aria-label="<?= (int) $unreadNotes ?> unread notifications"><?= (int) $unreadNotes ?></span><?php endif; ?></a>
                     <a href="<?= e(url('/profile')) ?>">Profile</a>
                     <form method="post" action="<?= e(url('/logout')) ?>" class="inline-form">
                         <?= csrf_field() ?>

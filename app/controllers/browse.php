@@ -69,15 +69,16 @@ function item_show(int $id): void
     $firstName = explode(' ', trim((string) $item['poster_name']))[0];
 
     view('items/show', [
-        'title'     => $item['title'],
-        'item'      => $item,
-        'images'    => item_images_for($id),
-        'poster'    => $firstName,
-        'isOwner'   => $isOwner,
-        'canEdit'   => $isOwner && $item['item_status'] === 'open' && user_can_act($user),
-        'canClaim'  => claim_eligibility($user, $item) === null,
-        'myClaim'   => $isOwner ? null : claim_has($id, (int) $user['user_id']),
-        'canReview' => $isStaff && user_can_act($user) && $item['report_type'] === 'found' && !$isOwner,
-        'scripts'   => ['js/gallery.js'],
+        'title'      => $item['title'],
+        'item'       => $item,
+        'images'     => item_images_for($id),
+        'poster'     => $firstName,
+        'isOwner'    => $isOwner,
+        'canEdit'    => $isOwner && $item['item_status'] === 'open' && user_can_act($user),
+        'canClaim'   => claim_eligibility($user, $item) === null,
+        'canMessage' => !$isOwner && messaging_rule_error($user, $item, (int) $item['reporter_id']) === null,
+        'myClaim'    => $isOwner ? null : claim_has($id, (int) $user['user_id']),
+        'canReview'  => $isStaff && user_can_act($user) && $item['report_type'] === 'found' && !$isOwner,
+        'scripts'    => ['js/gallery.js'],
     ]);
 }

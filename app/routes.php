@@ -47,4 +47,11 @@ return [
     ['POST', '/claims/{id}/handover/schedule',   'handover_schedule_submit'],
     ['POST', '/claims/{id}/handover/complete',   'handover_complete_submit'],
     ['POST', '/claims/{id}/handover/revoke',     'handover_revoke_submit'],
+    ['GET',  '/messages',                 'messages_inbox_page'],
+    ['GET',  '/messages/{id}/{id}',       'message_thread_show'],
+    ['POST', '/messages/{id}/{id}',       'message_send_submit'],
+
+    ['GET',  '/notifications',            'notifications_index'],
+    ['POST', '/notifications/read-all',   'notifications_read_all_submit'],
+    ['POST', '/notifications/{id}/read',  'notification_read_submit'],
 ];

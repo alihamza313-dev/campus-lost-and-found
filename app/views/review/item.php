@@ -26,6 +26,10 @@
             <span class="badge badge-<?= e($c['claim_status']) ?>"><?= e(ucfirst(str_replace('_', ' ', $c['claim_status']))) ?></span></h2>
         <p class="meta">By <?= e($c['claimant_name']) ?> (<?= e($c['claimant_email']) ?>) &middot; submitted <?= e($c['created_at']) ?></p>
 
+        <?php if (!$mine): ?>
+            <p><a class="btn btn-sm btn-secondary" href="<?= e(url('/messages/' . (int) $item['item_id'] . '/' . (int) $c['claimant_id'])) ?>">Message claimant</a></p>
+        <?php endif; ?>
+
         <h3>Ownership statement</h3>
         <p class="prewrap"><?= e($c['ownership_details']) ?></p>
 
