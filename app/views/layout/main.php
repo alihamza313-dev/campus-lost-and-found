@@ -30,6 +30,7 @@ $navUser = current_user();
                     <a href="<?= e(url('/my/claims')) ?>">My claims</a>
                     <?php if (in_array($navUser['role'], ['custodian', 'admin'], true)): ?>
                         <a href="<?= e(url('/review')) ?>">Review claims</a>
+                        <a href="<?= e(url('/custodian')) ?>">Handovers</a>
                     <?php endif; ?>
                     <a href="<?= e(url('/profile')) ?>">Profile</a>
                     <form method="post" action="<?= e(url('/logout')) ?>" class="inline-form">

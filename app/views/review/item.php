@@ -39,6 +39,10 @@
             <p><strong>Decision reason:</strong> <?= e($c['review_reason']) ?></p>
         <?php endif; ?>
 
+                <?php if ($c['claim_status'] === 'approved' && (int) $item['reporter_id'] !== (int) $me['user_id'] && !$mine): ?>
+            <p><a class="btn btn-sm" href="<?= e(url('/claims/' . (int) $c['claim_id'] . '/handover')) ?>">Manage handover</a></p>
+        <?php endif; ?>
+
         <?php if ($active && $mine): ?>
             <p class="muted">You cannot review your own claim.</p>
         <?php elseif ($active): ?>

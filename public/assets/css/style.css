@@ -603,3 +603,7 @@ a.btn {
     max-width: none;
     margin-bottom: 0;
 }
+/* ---------- Handovers (Module 7) ---------- */
+.badge-scheduled { background: #e6eefb; color: var(--color-accent); }
+.badge-completed { background: #eaf6ef; color: var(--color-success); }
+.badge-cancelled { background: #eef0f3; color: var(--color-muted); }

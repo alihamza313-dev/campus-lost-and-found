@@ -28,6 +28,16 @@
     <div class="alert alert-success" role="status">Your claim was approved. A custodian will arrange the handover. Bring your student ID.</div>
 <?php endif; ?>
 
+<?php if ($handover && $handover['handover_status'] === 'scheduled'): ?>
+    <div class="alert alert-success" role="status">Handover scheduled for <?= e(substr((string) $handover['scheduled_at'], 0, 16)) ?>. Bring your student ID.</div>
+<?php elseif ($handover && $handover['handover_status'] === 'completed'): ?>
+    <div class="alert alert-success" role="status">This item was handed over on <?= e(substr((string) $handover['completed_at'], 0, 16)) ?>.</div>
+<?php endif; ?>
+
+<?php if (!$isOwner && $isStaff && $claim['claim_status'] === 'approved'): ?>
+    <p><a class="btn" href="<?= e(url('/claims/' . (int) $claim['claim_id'] . '/handover')) ?>">Manage handover</a></p>
+<?php endif; ?>
+
 <?php if ($canWithdraw): ?>
     <form method="post" action="<?= e(url('/claims/' . (int) $claim['claim_id'] . '/withdraw')) ?>" data-confirm="Withdraw this claim? You cannot claim this item again.">
         <?= csrf_field() ?>

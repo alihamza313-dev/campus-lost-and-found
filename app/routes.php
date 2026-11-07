@@ -27,6 +27,7 @@ return [
     ['POST', '/items/{id}/close',     'item_close_submit'],
     ['POST', '/items/{id}/recovered', 'item_recovered_submit'],
     ['GET',  '/my/items',             'my_items_index'],
+
     ['GET',  '/items/{id}/claim',     'claim_form'],
     ['POST', '/items/{id}/claim',     'claim_submit'],
     ['GET',  '/my/claims',            'my_claims_index'],
@@ -40,4 +41,10 @@ return [
 
     ['GET',  '/evidence/{id}',        'evidence_show'],
     ['GET',  '/evidence/{id}/file',   'evidence_file'],
+
+    ['GET',  '/custodian',                       'custodian_dashboard'],
+    ['GET',  '/claims/{id}/handover',            'handover_page'],
+    ['POST', '/claims/{id}/handover/schedule',   'handover_schedule_submit'],
+    ['POST', '/claims/{id}/handover/complete',   'handover_complete_submit'],
+    ['POST', '/claims/{id}/handover/revoke',     'handover_revoke_submit'],
 ];
