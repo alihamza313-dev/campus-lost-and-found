@@ -17,14 +17,37 @@
     </div>
 <?php endif; ?>
 
-<?php if (user_can_act($user)): ?>
-    <p>
-        <a class="btn" href="<?= e(url('/items/new?type=lost')) ?>">Report a lost item</a>
+<p>
+    <a class="btn" href="<?= e(url('/items')) ?>">Browse listings</a>
+    <?php if (user_can_act($user)): ?>
+        <a class="btn btn-secondary" href="<?= e(url('/items/new?type=lost')) ?>">Report a lost item</a>
         <a class="btn btn-secondary" href="<?= e(url('/items/new?type=found')) ?>">Report a found item</a>
-        <a class="btn btn-secondary" href="<?= e(url('/my/items')) ?>">My listings</a>
-    </p>
+    <?php endif; ?>
+    <a class="btn btn-secondary" href="<?= e(url('/my/items')) ?>">My listings</a>
+</p>
+
+<h2>Your activity</h2>
+<table class="table">
+    <tr><th scope="row">Listings you posted</th><td><?= (int) $stats['total'] ?></td></tr>
+    <tr><th scope="row">Of those, still open</th><td><?= (int) $stats['open'] ?></td></tr>
+</table>
+
+<h2>Latest listings</h2>
+<?php if (!$latest): ?>
+    <p class="empty">Nothing has been posted yet.</p>
+<?php else: ?>
+    <ul class="plain-list">
+        <?php foreach ($latest as $it): ?>
+            <li>
+                <span class="badge badge-<?= e($it['report_type']) ?>"><?= e(ucfirst($it['report_type'])) ?></span>
+                <a href="<?= e(url('/items/' . (int) $it['item_id'])) ?>"><?= e($it['title']) ?></a>
+                <span class="muted">&middot; <?= e($it['location_name']) ?> &middot; <?= e($it['incident_date']) ?></span>
+            </li>
+        <?php endforeach; ?>
+    </ul>
 <?php endif; ?>
 
+<h2>Account</h2>
 <table class="table">
     <tr><th scope="row">Email</th><td><?= e($user['university_email']) ?></td></tr>
     <tr><th scope="row">Role</th><td><?= e(ucfirst($user['role'])) ?></td></tr>

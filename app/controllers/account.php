@@ -4,7 +4,12 @@ declare(strict_types=1);
 function dashboard_index(): void
 {
     $user = require_login();
-    view('account/dashboard', ['title' => 'Dashboard', 'user' => $user]);
+    view('account/dashboard', [
+        'title'  => 'Dashboard',
+        'user'   => $user,
+        'stats'  => user_item_stats((int) $user['user_id']),
+        'latest' => items_latest_public(5),
+    ]);
 }
 
 function verification_resend(): void

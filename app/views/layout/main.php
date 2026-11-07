@@ -23,6 +23,7 @@ $navUser = current_user();
             <nav aria-label="Main navigation">
                 <a href="<?= e(url('/')) ?>">Home</a>
                 <?php if ($navUser): ?>
+                    <a href="<?= e(url('/items')) ?>">Browse</a>
                     <a href="<?= e(url('/dashboard')) ?>">Dashboard</a>
                     <a href="<?= e(url('/items/new')) ?>">Report item</a>
                     <a href="<?= e(url('/my/items')) ?>">My listings</a>
