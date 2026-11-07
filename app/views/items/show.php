@@ -40,4 +40,14 @@
     <?php if ($canEdit): ?>
         <p><a class="btn btn-secondary" href="<?= e(url('/items/' . (int) $item['item_id'] . '/edit')) ?>">Edit this listing</a></p>
     <?php endif; ?>
+
+        <?php if ($canClaim): ?>
+        <p><a class="btn" href="<?= e(url('/items/' . (int) $item['item_id'] . '/claim')) ?>">Claim this item</a></p>
+    <?php elseif ($myClaim): ?>
+        <p>You already claimed this item (<?= e(str_replace('_', ' ', $myClaim['claim_status'])) ?>).
+           <a href="<?= e(url('/claims/' . (int) $myClaim['claim_id'])) ?>">View your claim</a></p>
+    <?php endif; ?>
+    <?php if ($canReview): ?>
+        <p><a class="btn btn-secondary" href="<?= e(url('/review/items/' . (int) $item['item_id'])) ?>">Review claims for this item</a></p>
+    <?php endif; ?>
 </article>

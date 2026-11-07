@@ -27,4 +27,17 @@ return [
     ['POST', '/items/{id}/close',     'item_close_submit'],
     ['POST', '/items/{id}/recovered', 'item_recovered_submit'],
     ['GET',  '/my/items',             'my_items_index'],
+    ['GET',  '/items/{id}/claim',     'claim_form'],
+    ['POST', '/items/{id}/claim',     'claim_submit'],
+    ['GET',  '/my/claims',            'my_claims_index'],
+    ['GET',  '/claims/{id}',          'claim_show'],
+    ['POST', '/claims/{id}/withdraw', 'claim_withdraw_submit'],
+    ['POST', '/claims/{id}/approve',  'claim_approve_submit'],
+    ['POST', '/claims/{id}/reject',   'claim_reject_submit'],
+
+    ['GET',  '/review',               'review_queue_index'],
+    ['GET',  '/review/items/{id}',    'review_item'],
+
+    ['GET',  '/evidence/{id}',        'evidence_show'],
+    ['GET',  '/evidence/{id}/file',   'evidence_file'],
 ];

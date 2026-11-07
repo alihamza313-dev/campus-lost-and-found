@@ -90,7 +90,7 @@ function image_validate_all(array $files, int $alreadyAttached): ?string
  * Re-encodes the image with GD and saves it under a random name. Returns the stored file name.
  * Re-encoding drops any hidden payload and metadata.
  */
-function image_process(array $f): string
+function image_process(array $f, ?string $dir = null): string
 {
     $mime = (string) (new finfo(FILEINFO_MIME_TYPE))->file($f['tmp_name']);
     if (!isset(IMAGE_TYPES[$mime])) {
@@ -119,7 +119,7 @@ function image_process(array $f): string
         }
     }
 
-    $dir = image_upload_dir();
+    $dir = $dir ?? image_upload_dir();
     if (!is_dir($dir)) {
         mkdir($dir, 0770, true);
     }

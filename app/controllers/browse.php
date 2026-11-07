@@ -60,7 +60,7 @@ function item_show(int $id): void
     $public  = in_array($item['item_status'], ITEM_PUBLIC_STATUSES, true);
 
     if (!$public && !$isOwner && !$isStaff) {
-        abort(404);                                   // same answer as "does not exist"
+        abort(404);
     }
     if ($item['item_status'] === 'removed' && $user['role'] !== 'admin') {
         abort(404);
@@ -75,6 +75,9 @@ function item_show(int $id): void
         'poster'    => $firstName,
         'isOwner'   => $isOwner,
         'canEdit'   => $isOwner && $item['item_status'] === 'open' && user_can_act($user),
+        'canClaim'  => claim_eligibility($user, $item) === null,
+        'myClaim'   => $isOwner ? null : claim_has($id, (int) $user['user_id']),
+        'canReview' => $isStaff && user_can_act($user) && $item['report_type'] === 'found' && !$isOwner,
         'scripts'   => ['js/gallery.js'],
     ]);
 }
