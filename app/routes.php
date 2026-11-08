@@ -89,4 +89,6 @@ return [
     ['POST', '/admin/reports/{id}/suspend',    'admin_report_suspend_submit'],
     ['GET',  '/admin/items',                   'admin_items_list'],
     ['POST', '/admin/items/{id}/remove',       'admin_item_remove_submit'],
+
+    ['GET',  '/help', 'help_index'],
 ];

@@ -161,6 +161,8 @@ function claim_show(int $id): void
         'isOwner'     => $isOwner,
         'proofId'     => claim_proof_id($id),
         'canWithdraw' => $isOwner && in_array($claim['claim_status'], ['pending', 'under_review'], true),
+        'handover' => handover_find_by_claim($id),
+        'isStaff'  => $isStaff,
     ]);
 }
 

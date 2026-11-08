@@ -80,5 +80,6 @@ function item_show(int $id): void
         'myClaim'    => $isOwner ? null : claim_has($id, (int) $user['user_id']),
         'canReview'  => $isStaff && user_can_act($user) && $item['report_type'] === 'found' && !$isOwner,
         'scripts'    => ['js/gallery.js'],
+        'user'       => $user,
     ]);
 }
