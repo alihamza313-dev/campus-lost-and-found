@@ -737,3 +737,6 @@ a.btn {
     margin: var(--space-2) 0 var(--space-4);
     max-width: 420px;
 }
+/* ---------- Reports (Module 9B) ---------- */
+.badge-resolved { background: #eaf6ef; color: var(--color-success); }
+.badge-dismissed { background: #eef0f3; color: var(--color-muted); }

@@ -23,7 +23,9 @@
 
 <h2>Manage</h2>
 <p>
-    <a class="btn" href="<?= e(url('/admin/users')) ?>">Users</a>
+    <a class="btn" href="<?= e(url('/admin/reports')) ?>">Reports<?= (int) $reports > 0 ? ' (' . (int) $reports . ')' : '' ?></a>
+    <a class="btn btn-secondary" href="<?= e(url('/admin/users')) ?>">Users</a>
+    <a class="btn btn-secondary" href="<?= e(url('/admin/items')) ?>">Listings</a>
     <a class="btn btn-secondary" href="<?= e(url('/admin/staff/new')) ?>">Create custodian</a>
     <a class="btn btn-secondary" href="<?= e(url('/admin/lookups')) ?>">Categories and locations</a>
     <a class="btn btn-secondary" href="<?= e(url('/admin/audit')) ?>">Audit log</a>

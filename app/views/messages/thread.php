@@ -5,6 +5,8 @@
     <?php if (in_array($item['item_status'], ITEM_PUBLIC_STATUSES, true)): ?>
         &middot; <a href="<?= e(url('/items/' . (int) $item['item_id'])) ?>">View listing</a>
     <?php endif; ?>
+
+    &middot; <a href="<?= e(url('/users/' . (int) $otherId . '/report')) ?>">Report this user</a>
 </p>
 
 <div class="thread" aria-label="Messages">
@@ -18,7 +20,10 @@
             <?php else: ?>
                 <p class="prewrap"><?= e($m['message_text']) ?></p>
             <?php endif; ?>
-            <small class="muted"><?= $mine ? 'You' : e($otherName) ?> &middot; <?= e(substr((string) $m['created_at'], 0, 16)) ?></small>
+            <small class="muted"><?= $mine ? 'You' : e($otherName) ?> &middot; <?= e(substr((string) $m['created_at'], 0, 16)) ?>
+                <?php if (!$mine && $m['message_status'] !== 'removed'): ?>
+                    &middot; <a href="<?= e(url('/messages/' . (int) $m['message_id'] . '/report')) ?>">Report</a>
+                <?php endif; ?></small>
         </div>
     <?php endforeach; ?>
 </div>

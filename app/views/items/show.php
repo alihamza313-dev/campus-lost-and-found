@@ -41,6 +41,14 @@
         <p><a class="btn btn-secondary" href="<?= e(url('/items/' . (int) $item['item_id'] . '/edit')) ?>">Edit this listing</a></p>
     <?php endif; ?>
 
+    <?php $viewer = current_user(); ?>
+    <?php if (!$isOwner && $viewer && user_can_act($viewer) && in_array($item['item_status'], ITEM_PUBLIC_STATUSES, true)): ?>
+        <p class="muted">
+            <a href="<?= e(url('/items/' . (int) $item['item_id'] . '/report')) ?>">Report this listing</a> &middot;
+            <a href="<?= e(url('/users/' . (int) $item['reporter_id'] . '/report')) ?>">Report the poster</a>
+        </p>
+    <?php endif; ?>
+
     <?php if ($canMessage): ?>
         <p><a class="btn btn-secondary" href="<?= e(url('/messages/' . (int) $item['item_id'] . '/' . (int) $item['reporter_id'])) ?>">Message the poster</a></p>
     <?php endif; ?>

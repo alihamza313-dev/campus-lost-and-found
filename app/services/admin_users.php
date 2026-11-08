@@ -46,7 +46,7 @@ function admin_is_last_active_admin(array $admins, array $target): bool
 
 /* ---------- Suspend (BR-2, BR-14, BR-15) ---------- */
 
-function admin_suspend_user(int $targetId, int $actorId, string $reason, int $days): array
+function admin_suspend_user(int $targetId, int $actorId, string $reason, int $days, ?int $reportId = null): array
 {
     $reason = trim($reason);
     if (mb_strlen($reason) < 3 || mb_strlen($reason) > 255) {
@@ -109,6 +109,11 @@ function admin_suspend_user(int $targetId, int $actorId, string $reason, int $da
 
         audit_log($actorId, 'user_suspended', 'user', $targetId,
             $reason . ($days === 0 ? ' (open-ended)' : " ($days days)") . '; claims withdrawn: ' . count($claims));
+        if ($reportId !== null) {
+            if ($err = report_close_in_tx($pdo, $reportId, $actorId, 'resolved', 'User suspended: ' . $reason, ['reported_user_id' => $targetId])) {
+                return claim_fail($pdo, $err);
+            }
+        }
         $pdo->commit();
 
         return ['ok' => true, 'message' => 'Account suspended. Pending claims withdrawn: ' . count($claims) . '.'];

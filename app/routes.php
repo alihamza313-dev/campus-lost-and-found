@@ -71,4 +71,22 @@ return [
     ['POST', '/admin/locations/{id}/rename',        'admin_location_rename_submit'],
     ['POST', '/admin/locations/{id}/active',        'admin_location_active_submit'],
     ['GET',  '/admin/audit',                        'admin_audit_log'],
+    
+    ['GET',  '/items/{id}/report',             'report_item_form'],
+    ['POST', '/items/{id}/report',             'report_item_submit'],
+    ['GET',  '/messages/{id}/report',          'report_message_form'],
+    ['POST', '/messages/{id}/report',          'report_message_submit'],
+    ['GET',  '/users/{id}/report',             'report_user_form'],
+    ['POST', '/users/{id}/report',             'report_user_submit'],
+
+    ['GET',  '/admin/reports',                 'admin_reports_list'],
+    ['GET',  '/admin/reports/{id}',            'admin_report_show'],
+    ['POST', '/admin/reports/{id}/review',     'admin_report_review_submit'],
+    ['POST', '/admin/reports/{id}/dismiss',    'admin_report_dismiss_submit'],
+    ['POST', '/admin/reports/{id}/resolve',    'admin_report_resolve_submit'],
+    ['POST', '/admin/reports/{id}/remove-item',    'admin_report_remove_item_submit'],
+    ['POST', '/admin/reports/{id}/remove-message', 'admin_report_remove_message_submit'],
+    ['POST', '/admin/reports/{id}/suspend',    'admin_report_suspend_submit'],
+    ['GET',  '/admin/items',                   'admin_items_list'],
+    ['POST', '/admin/items/{id}/remove',       'admin_item_remove_submit'],
 ];
