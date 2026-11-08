@@ -13,13 +13,19 @@ $active = static function (string $path, bool $prefix = false) use ($here): stri
     return $hit ? ' aria-current="page"' : '';
 };
 $initial = $navUser ? mb_strtoupper(mb_substr(trim((string) $navUser['full_name']), 0, 1)) : '';
+$mark = '<svg class="brand-mark" width="30" height="30" viewBox="0 0 32 32" aria-hidden="true" focusable="false">'
+      . '<rect width="32" height="32" rx="7" fill="#0e1a2e"/>'
+      . '<circle cx="14" cy="14" r="6" fill="none" stroke="#fff" stroke-width="2.6"/>'
+      . '<path d="M18.5 18.5 25 25" stroke="#fbbf24" stroke-width="3" stroke-linecap="round"/></svg>';
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="theme-color" content="#1f4d45">
+    <meta name="theme-color" content="#1d4ed8">
+    <meta name="description" content="Report lost items, post found items and get belongings back to the right person on campus.">
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230e1a2e'/%3E%3Ccircle cx='14' cy='14' r='6' fill='none' stroke='%23fff' stroke-width='2.6'/%3E%3Cpath d='M18.5 18.5 25 25' stroke='%23fbbf24' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E">
     <title><?= e(($title ?? '') !== '' ? $title . ' | ' : '') ?><?= e(config('app.name')) ?></title>
     <link rel="stylesheet" href="<?= e(asset('css/style.css')) ?>">
     <script src="<?= e(asset('js/app.js')) ?>" defer></script>
@@ -32,12 +38,8 @@ $initial = $navUser ? mb_strtoupper(mb_substr(trim((string) $navUser['full_name'
 
     <header class="site-header">
         <div class="container header-bar">
-            <a class="brand" href="<?= e(url('/')) ?>">
-                <svg class="brand-mark" width="30" height="30" viewBox="0 0 32 32" aria-hidden="true" focusable="false">
-                    <rect width="32" height="32" rx="8" fill="#1f4d45"/>
-                    <circle cx="14" cy="14" r="6" fill="none" stroke="#fff" stroke-width="2.4"/>
-                    <path d="M18.5 18.5 25 25" stroke="#f0a36b" stroke-width="2.8" stroke-linecap="round"/>
-                </svg>
+            <a class="brand" href="<?= e(url($navUser ? '/dashboard' : '/')) ?>">
+                <?= $mark ?>
                 <span><?= e(config('app.name')) ?></span>
             </a>
 
@@ -59,7 +61,7 @@ $initial = $navUser ? mb_strtoupper(mb_substr(trim((string) $navUser['full_name'
                         </summary>
                         <div class="user-menu-panel">
                             <p class="user-menu-id"><strong><?= e($navUser['full_name']) ?></strong><br>
-                                <small><?= e($navUser['university_email']) ?> &middot; <?= e(ucfirst($navUser['role'])) ?></small></p>
+                                <small><?= e($navUser['university_email']) ?><br><?= e(ucfirst($navUser['role'])) ?></small></p>
                             <a class="menu-item" href="<?= e(url('/profile')) ?>">Profile and password</a>
                             <a class="menu-item" href="<?= e(url('/help')) ?>">Help</a>
                             <form method="post" action="<?= e(url('/logout')) ?>" class="menu-form">
@@ -92,15 +94,15 @@ $initial = $navUser ? mb_strtoupper(mb_substr(trim((string) $navUser['full_name'
 
     <?php if ($navUser && (int) $navUser['is_suspended']): ?>
         <div class="notice-bar notice-bar-bad" role="status">
-            <div class="container notice-inner"><p><strong>Account suspended.</strong> You can browse, but you cannot post, claim, message or report.</p></div>
+            <div class="container notice-inner"><p><strong>Your account is suspended.</strong> You can browse, but you cannot post, claim, message or report.</p></div>
         </div>
     <?php elseif ($navUser && $navUser['verification_status'] === 'pending'): ?>
         <div class="notice-bar" role="status">
             <div class="container notice-inner">
-                <p><strong>Verify your email to get started.</strong> Until then you can browse but not post, claim or message.</p>
+                <p><strong>Check your inbox to verify your email.</strong> Until you do, you can browse but not post, claim or message.</p>
                 <form method="post" action="<?= e(url('/verify/resend')) ?>">
                     <?= csrf_field() ?>
-                    <button type="submit" class="btn btn-sm btn-secondary">Resend link</button>
+                    <button type="submit" class="btn btn-sm btn-secondary">Send the link again</button>
                 </form>
             </div>
         </div>
@@ -115,29 +117,55 @@ $initial = $navUser ? mb_strtoupper(mb_substr(trim((string) $navUser['full_name'
     </main>
 
     <footer class="site-footer">
-        <div class="container">
+        <div class="container footer-main">
             <div class="footer-grid">
                 <div>
-                    <p><strong><?= e(config('app.name')) ?></strong></p>
-                    <p class="muted">One trusted place to report lost items, post found items and return them to the right person.</p>
+                    <a class="footer-brand" href="<?= e(url($navUser ? '/dashboard' : '/')) ?>">
+                        <?= $mark ?>
+                        <span><?= e(config('app.name')) ?></span>
+                    </a>
+                    <p class="footer-about">One place on campus to report lost items, post found items and return them to the right person.</p>
+                    <span class="footer-safe">Handover is always in person, with student ID</span>
                 </div>
                 <div>
-                    <h2>Use</h2>
+                    <h2>Lost and found</h2>
                     <ul>
                         <li><a href="<?= e(url('/items')) ?>">Browse listings</a></li>
+                        <li><a href="<?= e(url('/items?type=found')) ?>">Search found items</a></li>
                         <li><a href="<?= e(url('/items/new?type=lost')) ?>">Report a lost item</a></li>
                         <li><a href="<?= e(url('/items/new?type=found')) ?>">Report a found item</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h2>Your account</h2>
+                    <ul>
+                        <?php if ($navUser): ?>
+                            <li><a href="<?= e(url('/dashboard')) ?>">Home</a></li>
+                            <li><a href="<?= e(url('/my/items')) ?>">My listings</a></li>
+                            <li><a href="<?= e(url('/my/claims')) ?>">My claims</a></li>
+                            <li><a href="<?= e(url('/messages')) ?>">Messages</a></li>
+                            <li><a href="<?= e(url('/profile')) ?>">Profile and password</a></li>
+                        <?php else: ?>
+                            <li><a href="<?= e(url('/login')) ?>">Log in</a></li>
+                            <li><a href="<?= e(url('/register')) ?>">Create an account</a></li>
+                        <?php endif; ?>
                     </ul>
                 </div>
                 <div>
                     <h2>Help</h2>
                     <ul>
                         <li><a href="<?= e(url('/help')) ?>">How it works</a></li>
-                        <li><a href="<?= e(url('/help#faq')) ?>">Questions</a></li>
+                        <li><a href="<?= e(url('/help#faq')) ?>">Common questions</a></li>
+                        <li><a href="<?= e(url('/help#staff')) ?>">What custodians do</a></li>
                     </ul>
                 </div>
             </div>
-            <p class="footer-note">&copy; <?= e(date('Y')) ?> <?= e(config('app.name')) ?>. Web Technologies course project.</p>
+        </div>
+        <div class="footer-bar">
+            <div class="container footer-bar-inner">
+                <p>&copy; <?= e(date('Y')) ?> <?= e(config('app.name')) ?></p>
+                <p>For students and staff with a <?= e(config('app.allowed_email_domain')) ?> email.</p>
+            </div>
         </div>
     </footer>
 </body>

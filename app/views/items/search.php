@@ -12,21 +12,22 @@ $locName = '';
 foreach ($locations as $l) { if ((int) $l['location_id'] === $f['location_id']) { $locName = $l['location_name']; } }
 
 $chips = [];
-if ($f['q'] !== '')        { $chips[] = ['Keyword: ' . $f['q'], page_url('/items', $without('q'))]; }
-if ($catName !== '')       { $chips[] = ['Category: ' . $catName, page_url('/items', $without('category_id'))]; }
-if ($locName !== '')       { $chips[] = ['Location: ' . $locName, page_url('/items', $without('location_id'))]; }
-if ($f['status'] !== '')   { $chips[] = ['Status: ' . ui_label($f['status']), page_url('/items', $without('status'))]; }
+if ($f['q'] !== '')         { $chips[] = ['Keyword: ' . $f['q'], page_url('/items', $without('q'))]; }
+if ($catName !== '')        { $chips[] = ['Category: ' . $catName, page_url('/items', $without('category_id'))]; }
+if ($locName !== '')        { $chips[] = ['Location: ' . $locName, page_url('/items', $without('location_id'))]; }
+if ($f['status'] !== '')    { $chips[] = ['Status: ' . ui_label($f['status']), page_url('/items', $without('status'))]; }
 if ($f['date_from'] !== '') { $chips[] = ['From ' . ui_date($f['date_from']), page_url('/items', $without('date_from'))]; }
 if ($f['date_to'] !== '')   { $chips[] = ['Until ' . ui_date($f['date_to']), page_url('/items', $without('date_to'))]; }
 
 $advancedOpen = $catName !== '' || $locName !== '' || $f['status'] !== '' || $f['date_from'] !== '' || $f['date_to'] !== '';
-$tabs = ['' => 'All', 'found' => 'Found items', 'lost' => 'Lost items'];
+$tabs = ['' => 'All listings', 'found' => 'Found items', 'lost' => 'Lost items'];
 ?>
 <div class="page-head">
     <div>
         <h1>Browse listings</h1>
-        <p class="muted">Lost something? Check the <strong>Found items</strong> tab first. Found something? Check <strong>Lost items</strong> to see if someone is looking for it.</p>
+        <p class="muted">Lost something? Open <strong>Found items</strong>. Found something? Open <strong>Lost items</strong> to see who is looking.</p>
     </div>
+    <a class="btn" href="<?= e(url('/items/new')) ?>">Report an item</a>
 </div>
 
 <form method="get" action="<?= e(url('/items')) ?>" role="search" class="search-form">
@@ -97,7 +98,7 @@ $tabs = ['' => 'All', 'found' => 'Found items', 'lost' => 'Lost items'];
     </div>
 <?php endif; ?>
 
-<p class="muted" role="status"><?= (int) $total ?> listing<?= $total === 1 ? '' : 's' ?> found</p>
+<p class="result-count" role="status"><?= (int) $total ?> listing<?= $total === 1 ? '' : 's' ?> found</p>
 
 <?php if (!$items): ?>
     <div class="empty">
@@ -105,13 +106,13 @@ $tabs = ['' => 'All', 'found' => 'Found items', 'lost' => 'Lost items'];
         <p>Try fewer words, remove a filter, or post it yourself so others can find it.</p>
         <p>
             <a class="btn btn-secondary" href="<?= e(url('/items')) ?>">Clear search</a>
-            <a class="btn" href="<?= e(url('/items/new?type=lost')) ?>">Report a lost item</a>
+            <a class="btn btn-lost" href="<?= e(url('/items/new?type=lost')) ?>">Report a lost item</a>
         </p>
     </div>
 <?php else: ?>
     <ul class="listing-grid">
         <?php foreach ($items as $it): ?>
-            <li class="listing-card">
+            <li class="listing-card is-<?= e($it['report_type']) ?>">
                 <div class="listing-thumb">
                     <?php if ($it['thumb']): ?>
                         <img src="<?= e(url('uploads/items/' . $it['thumb'])) ?>" alt="" loading="lazy">
@@ -122,7 +123,7 @@ $tabs = ['' => 'All', 'found' => 'Found items', 'lost' => 'Lost items'];
                 <span class="listing-flag badge badge-<?= e($it['report_type']) ?>"><?= e(ucfirst($it['report_type'])) ?></span>
                 <div class="listing-body">
                     <h2 class="listing-title"><a href="<?= e(url('/items/' . (int) $it['item_id'])) ?>"><?= e($it['title']) ?></a></h2>
-                    <p class="listing-meta"><?= e($it['location_name']) ?> &middot; <?= e(ui_date($it['incident_date'])) ?></p>
+                    <p class="listing-meta"><?= e($it['category_name']) ?> &middot; <?= e($it['location_name']) ?> &middot; <?= e(ui_date($it['incident_date'])) ?></p>
                     <?php if ($it['item_status'] !== 'open'): ?>
                         <p class="listing-meta"><span class="badge badge-<?= e($it['item_status']) ?>"><?= e(ui_label($it['item_status'])) ?></span></p>
                     <?php endif; ?>
@@ -135,11 +136,11 @@ $tabs = ['' => 'All', 'found' => 'Found items', 'lost' => 'Lost items'];
     <?php if ($pages > 1): ?>
         <nav class="pagination" aria-label="Pagination">
             <?php if ($page > 1): ?>
-                <a class="btn btn-sm btn-secondary" href="<?= e(page_url('/items', $base + ['page' => $page - 1])) ?>">&laquo; Previous</a>
+                <a class="btn btn-sm btn-secondary" href="<?= e(page_url('/items', $base + ['page' => $page - 1])) ?>">Previous</a>
             <?php endif; ?>
             <span>Page <?= (int) $page ?> of <?= (int) $pages ?></span>
             <?php if ($page < $pages): ?>
-                <a class="btn btn-sm btn-secondary" href="<?= e(page_url('/items', $base + ['page' => $page + 1])) ?>">Next &raquo;</a>
+                <a class="btn btn-sm btn-secondary" href="<?= e(page_url('/items', $base + ['page' => $page + 1])) ?>">Next</a>
             <?php endif; ?>
         </nav>
     <?php endif; ?>

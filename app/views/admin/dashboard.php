@@ -1,32 +1,39 @@
-<h1>Admin dashboard</h1>
+<div class="page-head">
+    <h1>Admin dashboard</h1>
+</div>
 
 <div class="stat-grid">
-    <div class="stat"><span class="stat-n"><?= (int) $users['total'] ?></span> users</div>
-    <div class="stat"><span class="stat-n"><?= (int) $users['students'] ?></span> students</div>
-    <div class="stat"><span class="stat-n"><?= (int) $users['custodians'] ?></span> custodians</div>
-    <div class="stat"><span class="stat-n"><?= (int) $users['admins'] ?></span> admins</div>
-    <div class="stat"><span class="stat-n"><?= (int) $users['suspended'] ?></span> suspended</div>
-    <div class="stat"><span class="stat-n"><?= (int) $users['unverified'] ?></span> unverified</div>
-    <div class="stat"><span class="stat-n"><?= (int) $reports ?></span> open reports</div>
+    <div class="stat<?= (int) $reports > 0 ? ' stat-alert' : '' ?>"><span class="stat-n"><?= (int) $reports ?></span><span class="stat-l">open reports</span></div>
+    <div class="stat"><span class="stat-n"><?= (int) $users['total'] ?></span><span class="stat-l">users</span></div>
+    <div class="stat"><span class="stat-n"><?= (int) $users['students'] ?></span><span class="stat-l">students</span></div>
+    <div class="stat"><span class="stat-n"><?= (int) $users['custodians'] ?></span><span class="stat-l">custodians</span></div>
+    <div class="stat"><span class="stat-n"><?= (int) $users['admins'] ?></span><span class="stat-l">admins</span></div>
+    <div class="stat"><span class="stat-n"><?= (int) $users['suspended'] ?></span><span class="stat-l">suspended</span></div>
+    <div class="stat"><span class="stat-n"><?= (int) $users['unverified'] ?></span><span class="stat-l">unverified</span></div>
+</div>
+
+<h2 class="first-h2">Manage</h2>
+<div class="link-grid">
+    <a class="tile<?= (int) $reports > 0 ? ' tile-lost' : '' ?>" href="<?= e(url('/admin/reports')) ?>"><strong>Reports<?= (int) $reports > 0 ? ' (' . (int) $reports . ')' : '' ?></strong><span>Review reported listings, messages and users.</span></a>
+    <a class="tile" href="<?= e(url('/admin/users')) ?>"><strong>Users</strong><span>Search, suspend and change roles.</span></a>
+    <a class="tile" href="<?= e(url('/admin/items')) ?>"><strong>Listings</strong><span>Find and remove listings.</span></a>
+    <a class="tile" href="<?= e(url('/admin/staff/new')) ?>"><strong>Create custodian</strong><span>Add a new staff account.</span></a>
+    <a class="tile" href="<?= e(url('/admin/lookups')) ?>"><strong>Categories and locations</strong><span>Edit the lists used in listings.</span></a>
+    <a class="tile" href="<?= e(url('/admin/audit')) ?>"><strong>Audit log</strong><span>Read-only history of key actions.</span></a>
 </div>
 
 <h2>Listings by status</h2>
 <?php if (!$items): ?>
     <p class="empty">No listings yet.</p>
 <?php else: ?>
-    <table class="table">
-        <?php foreach ($items as $status => $n): ?>
-            <tr><th scope="row"><?= e(ucfirst(str_replace('_', ' ', $status))) ?></th><td><?= (int) $n ?></td></tr>
-        <?php endforeach; ?>
-    </table>
+    <div class="table-wrap">
+        <table class="table">
+            <thead><tr><th scope="col">Status</th><th scope="col">Listings</th></tr></thead>
+            <tbody>
+            <?php foreach ($items as $status => $n): ?>
+                <tr><td><span class="badge badge-<?= e($status) ?>"><?= e(ucfirst(str_replace('_', ' ', $status))) ?></span></td><td><?= (int) $n ?></td></tr>
+            <?php endforeach; ?>
+            </tbody>
+        </table>
+    </div>
 <?php endif; ?>
-
-<h2>Manage</h2>
-<p>
-    <a class="btn" href="<?= e(url('/admin/reports')) ?>">Reports<?= (int) $reports > 0 ? ' (' . (int) $reports . ')' : '' ?></a>
-    <a class="btn btn-secondary" href="<?= e(url('/admin/users')) ?>">Users</a>
-    <a class="btn btn-secondary" href="<?= e(url('/admin/items')) ?>">Listings</a>
-    <a class="btn btn-secondary" href="<?= e(url('/admin/staff/new')) ?>">Create custodian</a>
-    <a class="btn btn-secondary" href="<?= e(url('/admin/lookups')) ?>">Categories and locations</a>
-    <a class="btn btn-secondary" href="<?= e(url('/admin/audit')) ?>">Audit log</a>
-</p>
