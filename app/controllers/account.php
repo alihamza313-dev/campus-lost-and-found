@@ -4,11 +4,15 @@ declare(strict_types=1);
 function dashboard_index(): void
 {
     $user = require_login();
+    $uid  = (int) $user['user_id'];
     view('account/dashboard', [
-        'title'  => 'Dashboard',
-        'user'   => $user,
-        'stats'  => user_item_stats((int) $user['user_id']),
-        'latest' => items_latest_public(5),
+        'title'       => 'Home',
+        'user'        => $user,
+        'stats'       => user_item_stats($uid),
+        'latest'      => items_latest_public(5),
+        'claims'      => claims_by_claimant($uid),
+        'unreadMsgs'  => message_unread_count($uid),
+        'unreadNotes' => notification_unread_count($uid),
     ]);
 }
 

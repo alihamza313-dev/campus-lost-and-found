@@ -3,7 +3,16 @@ declare(strict_types=1);
 
 function home_index(): void
 {
-    view('pages/home', ['title' => 'Home']);
+    // Signed-in people land on their dashboard, guests see the landing page.
+    if (current_user() !== null) {
+        redirect('/dashboard');
+    }
+    view('pages/home', ['title' => 'Find what you lost. Return what you found.']);
+}
+
+function help_index(): void
+{
+    view('pages/help', ['title' => 'How it works']);
 }
 
 function health_check(): void

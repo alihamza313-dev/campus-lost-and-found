@@ -1,5 +1,6 @@
 <section class="hero">
-    <h1>Access denied</h1>
-    <p>You are not allowed to do that, or your form expired. Go back, refresh the page and try again.</p>
-    <p><a href="<?= e(url('/')) ?>">Back to home</a></p>
+    <p class="eyebrow">Error 403</p>
+    <h1>You cannot do that</h1>
+    <p class="lead">Either you do not have permission, or your form expired. Go back, refresh the page and try again.</p>
+    <p><a class="btn" href="<?= e(url('/')) ?>">Go to home</a></p>
 </section>
