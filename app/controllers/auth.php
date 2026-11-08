@@ -19,13 +19,13 @@ function register_submit(): void
     require_csrf();
 
     $old = [
-        'full_name'  => trim((string) ($_POST['full_name'] ?? '')),
-        'email'      => strtolower(trim((string) ($_POST['email'] ?? ''))),
-        'student_id' => trim((string) ($_POST['student_id'] ?? '')),
-        'phone'      => trim((string) ($_POST['phone'] ?? '')),
+        'full_name'  => post_str('full_name'),
+        'email'      => strtolower(post_str('email')),
+        'student_id' => post_str('student_id'),
+        'phone'      => post_str('phone'),
     ];
-    $password = (string) ($_POST['password'] ?? '');
-    $confirm  = (string) ($_POST['password_confirm'] ?? '');
+    $password = post_raw('password');
+    $confirm  = post_raw('password_confirm');
 
     $errors = [];
     if (mb_strlen($old['full_name']) < 2 || mb_strlen($old['full_name']) > 100) {
@@ -120,8 +120,8 @@ function login_submit(): void
     }
     require_csrf();
 
-    $email    = strtolower(trim((string) ($_POST['email'] ?? '')));
-    $password = (string) ($_POST['password'] ?? '');
+    $email    = strtolower(post_str('email'));
+    $password = post_raw('password');
 
     // Two counters: one per email (works even for emails that do not exist) and one per IP (T-15).
     $emailKey = 'login:email:' . hash('sha256', $email);
@@ -170,7 +170,7 @@ function logout_submit(): void
 
 function verify_email(): void
 {
-    $token = (string) ($_GET['token'] ?? '');
+    $token = get_str('token');
     if (!preg_match('/^[a-f0-9]{64}$/', $token)) {
         flash_set('error', 'This verification link is invalid.');
         redirect('/login');

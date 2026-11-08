@@ -46,3 +46,10 @@ function form_token_consume(): bool
     unset($_SESSION['form_tokens'][$sent]);
     return $age <= 7200;                              // a form is valid for 2 hours
 }
+
+/** Reads a POST field as a string WITHOUT trimming (for passwords). Arrays become ''. */
+function post_raw(string $key): string
+{
+    $v = $_POST[$key] ?? '';
+    return is_string($v) ? $v : '';
+}

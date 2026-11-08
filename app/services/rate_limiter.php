@@ -25,6 +25,9 @@ function rate_record(string $key, int $window): int
          ON DUPLICATE KEY UPDATE hit_count = hit_count + 1'
     );
     $stmt->execute([$key]);
+    if (random_int(1, 200) === 1) {      // housekeeping: about 1 write in 200 also purges old rows
+        rate_cleanup();
+    }
     return rate_count($key, $window);
 }
 
@@ -47,4 +50,12 @@ function rate_allow(string $limitName, string $key): bool
 {
     $cfg = config("limits.$limitName");
     return rate_record($key, (int) $cfg['window']) <= (int) $cfg['max'];
+}
+
+/** Deletes counters whose window ended more than 2 days ago (the longest window is 1 day). Returns rows deleted. */
+function rate_cleanup(): int
+{
+    $stmt = db()->prepare('DELETE FROM rate_limits WHERE window_start < NOW() - INTERVAL 2 DAY');
+    $stmt->execute();
+    return $stmt->rowCount();
 }

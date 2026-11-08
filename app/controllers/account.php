@@ -49,8 +49,8 @@ function profile_update(): void
     require_csrf();
 
     $old = [
-        'full_name' => trim((string) ($_POST['full_name'] ?? '')),
-        'phone'     => trim((string) ($_POST['phone'] ?? '')),
+        'full_name' => post_str('full_name'),
+        'phone'     => post_str('phone'),
     ];
 
     $errors = [];
@@ -79,9 +79,9 @@ function password_update(): void
     $user = require_login();
     require_csrf();
 
-    $current = (string) ($_POST['current_password'] ?? '');
-    $new     = (string) ($_POST['new_password'] ?? '');
-    $confirm = (string) ($_POST['confirm_password'] ?? '');
+    $current = post_raw('current_password');
+    $new     = post_raw('new_password');
+    $confirm = post_raw('confirm_password');
 
     $errors = [];
     if (!password_verify($current, user_password_hash((int) $user['user_id']))) {
